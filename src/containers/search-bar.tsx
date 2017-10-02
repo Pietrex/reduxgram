@@ -1,16 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import * as history from "connected-react-router";
 import AutoBind from "autobind-decorator";
 
-import { fetchPhotos } from "@src/actions/creators";
-import { Dispatch } from "@src/types/redux";
+import { fetchPhotos, redirectToProfilePage } from "@src/actions/creators";
 
 interface Props {
-    fetchPhotos(profileName: string): Promise<never>;
-    redirectToProfile(name: string): never;
+    fetchPhotos: typeof fetchPhotos;
+    redirectToProfilePage: typeof redirectToProfilePage;
 }
-class SearchBar extends Component<Props> {
+export class SearchBar extends Component<Props> {
 
     private readonly initialProfileName = "gorrion.pl";
     private inputField: HTMLInputElement;
@@ -41,13 +39,7 @@ class SearchBar extends Component<Props> {
     private async onSearchSubmit() {
         const profileName = this.inputField.value;
         await this.props.fetchPhotos(profileName);
-        this.props.redirectToProfile(profileName);
+        this.props.redirectToProfilePage(profileName);
     }
 }
-function mapDispatchToProps(dispatch: Dispatch) {
-    return {
-        fetchPhotos: (profileName: string) => dispatch(fetchPhotos(profileName)),
-        redirectToProfile: (profileName: string) => dispatch(history.push(`/${profileName}`)),
-    };
-}
-export const SearchBarContainer = connect(null, mapDispatchToProps)(SearchBar);
+export const SearchBarContainer = connect(null, { fetchPhotos, redirectToProfilePage })(SearchBar);

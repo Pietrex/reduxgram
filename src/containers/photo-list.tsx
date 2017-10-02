@@ -5,8 +5,6 @@ import { Link } from "react-router-dom";
 
 import { RootState } from "@src/state/state";
 import { Photo } from "@src/interfaces/data";
-import { Dispatch } from "@src/types/redux";
-import { bindActionCreators } from "redux";
 import { fetchPhotos } from "@src/actions/creators";
 
 interface Props {
@@ -15,7 +13,7 @@ interface Props {
     profileName: string;
     fetchPhotos: typeof fetchPhotos;
 }
-class PhotoList extends Component<Props> {
+export class PhotoList extends Component<Props> {
 
     componentDidMount() {
         if (this.props.photos.length === 0) {
@@ -60,9 +58,4 @@ function mapStateToProps(state: RootState) {
         profileName: state.photos.profileName,
     };
 }
-function mapDispatchToProps(dispatch: Dispatch) {
-    return bindActionCreators({
-        fetchPhotos,
-    }, dispatch);
-}
-export const PhotoListContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(PhotoList));
+export const PhotoListContainer = withRouter(connect(mapStateToProps, { fetchPhotos })(PhotoList));

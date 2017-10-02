@@ -5,15 +5,14 @@ import { withRouter, RouteComponentProps, match } from "react-router";
 import { RootState } from "@src/state/state";
 import { CommentsList } from "@src/components/comments-list";
 import { Photo as PhotoData } from "@src/interfaces/data";
-import { Dispatch } from "@src/types/redux";
 import { fetchPhotos } from "@src/actions/creators";
 
 interface Props {
     match: match<{profileName: string}>;
     photo: PhotoData | undefined;
-    fetchPhotos: (profileName: string) => Promise<void>;
+    fetchPhotos: typeof fetchPhotos;
 }
-class Photo extends Component<Props> {
+export class Photo extends Component<Props> {
 
     componentDidMount() {
         if (!this.props.photo) {
@@ -52,9 +51,7 @@ class Photo extends Component<Props> {
 function mapStateToProps(state: RootState, ownProps: RouteComponentProps<{photoId: string}>) {
     return { photo: state.photos.photos.find(photo => photo.id === ownProps.match.params.photoId) };
 }
-function mapDispatchToProps(dispatch: Dispatch) {
-    return {
-        fetchPhotos: (profileName: string) => dispatch(fetchPhotos(profileName)),
-    };
+function mapDispatchToProps() {
+    return { fetchPhotos };
 }
 export const PhotoContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(Photo));

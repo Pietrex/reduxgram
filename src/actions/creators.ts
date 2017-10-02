@@ -1,3 +1,5 @@
+import * as history from "connected-react-router";
+
 import { Photo, Comment } from "@src/interfaces/data";
 import { ActionType } from "@src/actions/types";
 import { RootObject as EndpointReponse } from "@src/interfaces/endpoint";
@@ -48,3 +50,5 @@ export const fetchPhotos = createActionCreator((profileName: string) => async (d
         },
     });
 });
+
+export const redirectToProfilePage = createActionCreator((profileName: string) => history.push(`/${profileName}`));
